@@ -1,0 +1,52 @@
+{% extends 'checker/base.html' %}
+
+{% block content %}
+    <h1>Website Checker</h1>
+    <form method="post" action="{% url 'home' %}">
+      {% csrf_token %}
+      <textarea name="website_urls" rows="10" cols="50" placeholder="Enter website URLs"></textarea>
+      <br>
+      <input type="submit" value="Check Websites">
+  </form>
+
+    <!-- Add the "Download CSV" form -->
+  <form method="post" action="{% url 'download_csv' %}">
+      {% csrf_token %}
+      <input type="hidden" name="download_csv" value="1">
+      <input type="submit" value="Download CSV">
+  </form>
+
+    <!-- Display the result table if available -->
+    {% if websites_data %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Website</th>
+                    <th>Status</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Business Summary</th>
+                    <th>Emails</th>
+                    <th>Phones</th>
+                    <th>Facebook</th>
+                    <th>Instagram</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in websites_data %}
+                    <tr>
+                        <td>{{ data.url }}</td>
+                        <td>{{ data.is_down }}</td>
+                        <td>{{ data.title }}</td>
+                        <td>{{ data.description }}</td>
+                        <td>{{ data.business_summary }}</td>
+                        <td>{{ data.emails|join:", " }}</td>
+                        <td>{{ data.phones|join:", " }}</td>
+                        <td>{{ data.facebook_links|join:", " }}</td>
+                        <td>{{ data.instagram_links|join:", " }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

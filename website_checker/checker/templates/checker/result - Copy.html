@@ -1,0 +1,77 @@
+<!-- website_checker/checker/templates/checker/result.html -->
+<!DOCTYPE html>
+{% extends 'checker/base.html' %}
+<html>
+<head>
+    <title>Website Checker - Results</title>
+</head>
+<body>
+    <h1>Website Checker - Results</h1>
+    <table border="1">
+        <tr>
+            <th>Website</th>
+            <th>Status</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Business Summary</th>
+            <th>Emails</th>
+            <th>Phones</th>
+            <th>Facebook</th>
+            <th>Instagram</th>
+        </tr>
+        {% for data in websites_data %}
+        <tr>
+            <td>{{ data.url }}</td>
+            <td style="color: {% if data.is_down %}red{% else %}green{% endif %}">
+                {% if data.is_down %}Down{% else %}Up{% endif %}
+            </td>
+            <td>{{ data.title }}</td>
+            <td>{{ data.description }}</td>
+            <td>{{ data.business_summary }}</td>
+            <td>
+                {% if data.emails %}
+                    {% for email in data.emails %}
+                        {{ email }}<br>
+                    {% endfor %}
+                {% else %}
+                    No emails found
+                {% endif %}
+            </td>
+            <td>
+                {% if data.phones %}
+                    {% for phone in data.phones %}
+                        {{ phone }}<br>
+                    {% endfor %}
+                {% else %}
+                    No phones found
+                {% endif %}
+            </td>
+            <td>
+                {% if data.facebook_links %}
+                    {% for facebook in data.facebook_links %}
+                        {{ facebook }}<br>
+                    {% endfor %}
+                {% else %}
+                    No Facebook links found
+                {% endif %}
+            </td>
+            <td>
+                {% if data.instagram_links %}
+                    {% for instagram in data.instagram_links %}
+                        {{ instagram }}<br>
+                    {% endfor %}
+                {% else %}
+                    No Instagram links found
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+<form method="post" action="{% url 'download_csv' %}">
+    {% csrf_token %} <!-- Add the CSRF token to the form -->
+    <input type="hidden" name="download_csv" value="true">
+    <input type="submit" value="Download CSV">
+</form>
+</body>
+</html>

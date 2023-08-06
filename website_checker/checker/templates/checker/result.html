@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+{% extends 'checker/base.html' %}
+
+{% block content %}
+  <h1>Website Checker - Results</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Website</th>
+        <th>Status</th>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Business Summary</th>
+        <th>Emails</th>
+        <th>Phones</th>
+        <th>Facebook</th>
+        <th>Instagram</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for website_data in websites_data %}
+        <tr>
+          <td>{{ website_data.url }}</td>
+          <td>{{ website_data.status }}</td> <!-- Use 'status' instead of 'is_down' -->
+          <td>{{ website_data.title }}</td>
+          <td>{{ website_data.description }}</td>
+          <td>{{ website_data.business_summary }}</td>
+          <td>{{ website_data.emails|join:", " }}</td>
+          <td>{{ website_data.phones|join:", " }}</td>
+          <td>{{ website_data.facebook_links|join:", " }}</td>
+          <td>{{ website_data.instagram_links|join:", " }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="website_urls" value="{{ website_urls }}">
+    <input type="submit" name="download_csv" value="Download CSV">
+  </form>
+{% endblock %}

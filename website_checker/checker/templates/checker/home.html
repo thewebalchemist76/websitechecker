@@ -1,0 +1,80 @@
+{% extends 'checker/base.html' %}
+{% load static %}
+{% block content %}
+    <h1>Website Checker</h1>
+    <form id="website-form" method="post" action="{% url 'home' %}">
+      {% csrf_token %}
+      <textarea name="website_urls" rows="10" cols="50" placeholder="Enter website URLs"></textarea>
+      <br>
+      <input type="submit" name="check_websites" value="Check Websites">
+    </form>
+    <form id="download-form" method="post" action="{% url 'download_csv' %}">
+      {% csrf_token %}
+      <button type="submit" id="download-button">Download CSV</button>
+    </form>
+
+    <!-- Loading GIF
+    <img id="loading" src="{% static 'checker/loading.gif' %}" alt="Loading..." style="display: none;">  -->
+<p id="loading" style="display: none;">Loading...</p>
+    <!-- Display the result table if available -->
+    {% if websites_data %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Website</th>
+                    <th>Status</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Business Summary</th>
+                    <th>Emails</th>
+                    <th>Phones</th>
+                    <th>Facebook</th>
+                    <th>Instagram</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in websites_data %}
+                    <tr>
+                        <td>{{ data.url }}</td>
+                        <td>{{ data.status }}</td>
+                        <td>{{ data.title }}</td>
+                        <td>{{ data.description }}</td>
+                        <td>{{ data.business_summary }}</td>
+                        <td>{{ data.emails|join:", " }}</td>
+                        <td>{{ data.phones|join:", " }}</td>
+                        <td>{{ data.facebook_links|join:", " }}</td>
+                        <td>{{ data.instagram_links|join:", " }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+<script>
+$(document).ready(function() {
+    console.log("Document is ready");
+    $('#website-form').on('submit', function(e) {
+        e.preventDefault();
+        console.log("Website form submitted");
+        $('#loading').show();
+        setTimeout(() => {
+            $('#website-form').trigger('submit');
+        }, 2000); // delay of 2 seconds
+    });
+    $('#download-form').on('submit', function(e) {
+        e.preventDefault();
+        console.log("Download form submitted");
+        $('#loading').show();
+        setTimeout(() => {
+            $('#download-form').trigger('submit');
+        }, 2000); // delay of 2 seconds
+    });
+});
+</script>
+
+
+{% endblock %}
