@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-ah@v1i=%%uwlpa&qm=k&ru!@6c#ys2w#o3)5=p^zd3u=@c#0wz
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.vercel.app']
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 SESSION_COOKIE_AGE = 1200
